@@ -9,7 +9,7 @@
 2. 이번 예제는 AOuth 2.0 의 OpenID 방식의 JWT를 이용한 예제다
 3. 예제 실행시 솔루션 속성에서 시작 프로젝트를 여러 시작프로젝트를 선택한 후 서버와 API프로젝트를 선택하여 함께 실행한다.
 
-![실행선택이미지](./image/StartProject.jpg)
+![StartProject](./image/StartProject.jpg)
 4. 현재 상태로 API를 실행해보면 인증때문에 접속할 수 없다는 문구가 나올 것이다.
 
 ## PostMan 설정
