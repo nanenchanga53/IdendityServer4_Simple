@@ -12,19 +12,19 @@ namespace Api.FrameWork
     {
         public void Configuration(IAppBuilder app)
         {
-
+            //Jwt 설정에 대해 초기화
             JwtSecurityTokenHandler.DefaultInboundClaimFilter.Clear();
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
             JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
             app.UseIdentityServerBearerTokenAuthentication(new IdentityServerBearerTokenAuthenticationOptions()
             {
-                Authority = "https://localhost:5001",
+                Authority = "https://localhost:5001", //인증 Endpoint
                 //ClientId = "client1",
                 //ClientSecret = "secret",
-                RequiredScopes = new[] { "api1" }
+                RequiredScopes = new[] { "api1" } // API 에서 사용될 Scope 묶음
 
             });
-            // configure web api
+
             var config = new HttpConfiguration();
             config.MapHttpAttributeRoutes();
 

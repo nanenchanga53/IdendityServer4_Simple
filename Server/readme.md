@@ -72,6 +72,7 @@ var builder = services.AddIdentityServer(
 app.UseIdentityServer();
 ```
 <hr>
+
 ## 추가 설명
 1. 콘솔로 시작되어 그 안에 실행하는 로그를 보려면 Nuget Package <span style="color:rgb(255,0,255)">Serilog.AspNetCore</span>를 설치한다
 2. [http://localhost:[설정된 포트]/.well-known/openid-configuration]를 통해 현재 등록된 정보들의 대략적인 정보들을 볼 수 있다 
