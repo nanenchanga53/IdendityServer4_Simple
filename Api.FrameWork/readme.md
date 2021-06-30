@@ -15,6 +15,8 @@
     * IdentityServer3.Contrib.AccessTokenValidation
 
 4. 추가하는 파일은 OWIN시작 클래스 [ <span style="color:rgb(255,255,0)">Startup.cs</span> ], 비어있는 API Controller 2 [ <span style="color:rgb(255,255,0)">IdentityController.cs</span> ]두가지다
+![OWIN시작클래스](https://user-images.githubusercontent.com/39551265/123902756-5ba1de00-d9a8-11eb-8295-91d9f3647544.JPG)
+
 
 ## IdentityServer4 Server와의 OAuth2.0 인증 설정
 1. <span style="color:rgb(255,2555,0)">startup.cs</span> 파일에서 <span style="color:rgb(0,2555,255)">ConfigureServices(</span> 매서를 추가하여 안에 인증에 대한 정의를 추가한다.(아래는 BearerToken을 통해 인증을 하는 app 설정을 추가하는 것)
