@@ -5,7 +5,8 @@
 1. Core3.1 버전으로 (웹)프로젝트 시작
 2. Nuget Package 설치 - <span style="color:rgb(255,0,255)">IdentityServer4 </span>
 3. <span style="color:rgb(255,2555,0)">launchSettings.json</span> 파일에서 Selfhost를 실행하도록 변경
- <pre>
+
+```json
  {
   "profiles": {
     "SelfHost": {
@@ -18,46 +19,58 @@
     }
   }
 }
- </pre>
+```
+
 4. 우선 사용자 정보를 정의하기 위한 모델을 정의한다. <span style="color:rgb(255,2555,0)">Config.cs</span>클래스를 생성하여 사용자 정보, 사용API SCOPE에 대한 정보 모델을 생성한다(DB를 사용한다면 불러오는 소스코드 혹은 등록, 삭제하는 코드를 구현한다)
-'''csharp
+```c#
 
-        public static IEnumerable<ApiScope> ApiScopes =>
-            new List<ApiScope>
+public static IEnumerable<ApiScope> ApiScopes =>
+    new List<ApiScope>
+    {
+        new ApiScope("api1", "My API")
+    };
+
+//클라이언트 정보 정의
+public static IEnumerable<Client> Clients =>
+    new List<Client>
+    {
+        new Client
+        {
+            // 클라이언트 ID
+            ClientId = "client",
+
+            // 아래방식은 유저등록을 따로 하지 않을때(OpenID) 사용 방식
+            AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+            ClientSecrets =
             {
-                new ApiScope("api1", "My API")
-            };
+                new Secret("secret".Sha256()) //암호/ 암호 저장 방식
+            },
 
-        //클라이언트 정보 정의
-        public static IEnumerable<Client> Clients =>
-            new List<Client>
-            {
-                new Client
-                {
-                    // 클라이언트 ID
-                    ClientId = "client",
-
-                    // 아래방식은 유저등록을 따로 하지 않을때(OpenID) 사용 방식
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
-
-                    // secret for authentication
-                    ClientSecrets =
-                    {
-                        new Secret("secret".Sha256()) //암호/ 암호 저장 방식
-                    },
-
-                    // scopes that client has access to
-                    AllowedScopes = { "api1" } //해당 Scope
-                }
-            };
-'''
-<div class="colorscripter-code" style="color:#010101;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important; position:relative !important;overflow:auto"><table class="colorscripter-code-table" style="margin:0;padding:0;border:none;background-color:#fafafa;border-radius:4px;" cellspacing="0" cellpadding="0"><tr><td style="padding:6px;border-right:2px solid #e5e5e5"><div style="margin:0;padding:0;word-break:normal;text-align:right;color:#666;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;line-height:130%"><div style="line-height:130%">1</div><div style="line-height:130%">2</div><div style="line-height:130%">3</div><div style="line-height:130%">4</div><div style="line-height:130%">5</div><div style="line-height:130%">6</div><div style="line-height:130%">7</div><div style="line-height:130%">8</div><div style="line-height:130%">9</div><div style="line-height:130%">10</div><div style="line-height:130%">11</div><div style="line-height:130%">12</div><div style="line-height:130%">13</div><div style="line-height:130%">14</div><div style="line-height:130%">15</div><div style="line-height:130%">16</div><div style="line-height:130%">17</div><div style="line-height:130%">18</div><div style="line-height:130%">19</div><div style="line-height:130%">20</div><div style="line-height:130%">21</div><div style="line-height:130%">22</div><div style="line-height:130%">23</div><div style="line-height:130%">24</div><div style="line-height:130%">25</div><div style="line-height:130%">26</div><div style="line-height:130%">27</div></div></td><td style="padding:6px 0;text-align:left"><div style="margin:0;padding:0;color:#010101;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;line-height:130%"><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#a71d5d">public</span>&nbsp;<span style="color:#a71d5d">static</span>&nbsp;IEnumerable<span style="color:#0086b3"></span><span style="color:#a71d5d">&lt;</span>ApiScope<span style="color:#0086b3"></span><span style="color:#a71d5d">&gt;</span>&nbsp;ApiScopes&nbsp;<span style="color:#0086b3"></span><span style="color:#a71d5d">=</span><span style="color:#0086b3"></span><span style="color:#a71d5d">&gt;</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#a71d5d">new</span>&nbsp;<span style="color:#066de2">List</span><span style="color:#a71d5d">&lt;</span>ApiScope<span style="color:#0086b3"></span><span style="color:#a71d5d">&gt;</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;{</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#a71d5d">new</span>&nbsp;ApiScope(<span style="color:#63a35c">"api1"</span>,&nbsp;<span style="color:#63a35c">"My&nbsp;API"</span>)</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;};</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%"><span style="color:#a71d5d">public</span>&nbsp;<span style="color:#a71d5d">static</span>&nbsp;IEnumerable<span style="color:#0086b3"></span><span style="color:#a71d5d">&lt;</span>Client<span style="color:#0086b3"></span><span style="color:#a71d5d">&gt;</span>&nbsp;Clients&nbsp;<span style="color:#0086b3"></span><span style="color:#a71d5d">=</span><span style="color:#0086b3"></span><span style="color:#a71d5d">&gt;</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#a71d5d">new</span>&nbsp;<span style="color:#066de2">List</span><span style="color:#a71d5d">&lt;</span>Client<span style="color:#0086b3"></span><span style="color:#a71d5d">&gt;</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;{</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#a71d5d">new</span>&nbsp;Client</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ClientId&nbsp;<span style="color:#0086b3"></span><span style="color:#a71d5d">=</span>&nbsp;<span style="color:#63a35c">"client"</span>,</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#999999">//&nbsp;no&nbsp;interactive&nbsp;user,&nbsp;use&nbsp;the&nbsp;clientid/secret&nbsp;for&nbsp;authentication</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AllowedGrantTypes&nbsp;<span style="color:#0086b3"></span><span style="color:#a71d5d">=</span>&nbsp;GrantTypes.ClientCredentials,</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#999999">//&nbsp;secret&nbsp;for&nbsp;authentication</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ClientSecrets&nbsp;<span style="color:#0086b3"></span><span style="color:#a71d5d">=</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#a71d5d">new</span>&nbsp;Secret(<span style="color:#63a35c">"secret"</span>.Sha256())</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#999999">//&nbsp;scopes&nbsp;that&nbsp;client&nbsp;has&nbsp;access&nbsp;to</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AllowedScopes&nbsp;<span style="color:#0086b3"></span><span style="color:#a71d5d">=</span>&nbsp;{&nbsp;<span style="color:#63a35c">"api1"</span>&nbsp;}</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;};</div></div><div style="text-align:right;margin-top:-13px;margin-right:5px;font-size:9px;font-style:italic"><a href="http://colorscripter.com/info#e" target="_blank" style="color:#e5e5e5text-decoration:none">Colored by Color Scripter</a></div></td><td style="vertical-align:bottom;padding:0 2px 4px 0"><a href="http://colorscripter.com/info#e" target="_blank" style="text-decoration:none;color:white"><span style="font-size:9px;word-break:normal;background-color:#e5e5e5;color:white;border-radius:10px;padding:1px">cs</span></a></td></tr></table></div>
-
+            AllowedScopes = { "api1" } //해당 Scope
+        }
+    };
+```
 5. <span style="color:rgb(255,2555,0)">startup.cs</span> 파일에서 <span style="color:rgb(0,2555,255)">ConfigureServices(</span> 매서드 안에 아래의 소스를 추가하여 인증에 대한 정의를 추가한다
-<div class="colorscripter-code" style="color:#010101;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important; position:relative !important;overflow:auto"><table class="colorscripter-code-table" style="margin:0;padding:0;border:none;background-color:#fafafa;border-radius:4px;" cellspacing="0" cellpadding="0"><tr><td style="padding:6px;border-right:2px solid #e5e5e5"><div style="margin:0;padding:0;word-break:normal;text-align:right;color:#666;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;line-height:130%"><div style="line-height:130%">1</div><div style="line-height:130%">2</div><div style="line-height:130%">3</div><div style="line-height:130%">4</div><div style="line-height:130%">5</div><div style="line-height:130%">6</div><div style="line-height:130%">7</div><div style="line-height:130%">8</div><div style="line-height:130%">9</div></div></td><td style="padding:6px 0;text-align:left"><div style="margin:0;padding:0;color:#010101;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;line-height:130%"><div style="padding:0 6px; white-space:pre; line-height:130%">var&nbsp;builder&nbsp;<span style="color:#0086b3"></span><span style="color:#a71d5d">=</span>&nbsp;services.AddIdentityServer(</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options.AccessTokenJwtType&nbsp;<span style="color:#0086b3"></span><span style="color:#a71d5d">=</span>&nbsp;<span style="color:#63a35c">"JWT"</span>;</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;options.EmitStaticAudienceClaim&nbsp;<span style="color:#0086b3"></span><span style="color:#a71d5d">=</span>&nbsp;<span style="color:#a71d5d">true</span>;</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;)&nbsp;<span style="color:#999999">//&nbsp;인증서비스&nbsp;등록방식&nbsp;생성(JWT&nbsp;방식을&nbsp;쓰는&nbsp;이유는&nbsp;Framework와&nbsp;호환을&nbsp;위해)</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.AddDeveloperSigningCredential()&nbsp;<span style="color:#999999">//개발시에만&nbsp;사용하자(배포시&nbsp;보여지면&nbsp;안되는&nbsp;정보도&nbsp;포함되어&nbsp;보여짐).</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.AddInMemoryApiScopes(Config.ApiScopes)&nbsp;<span style="color:#999999">//API&nbsp;SCOPE&nbsp;등록</span></div><div style="padding:0 6px; white-space:pre; line-height:130%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.AddInMemoryClients(Config.Clients);&nbsp;<span style="color:#999999">//클라이언트&nbsp;등록</span></div></div></td><td style="vertical-align:bottom;padding:0 2px 4px 0"><a href="http://colorscripter.com/info#e" target="_blank" style="text-decoration:none;color:white"><span style="font-size:9px;word-break:normal;background-color:#e5e5e5;color:white;border-radius:10px;padding:1px">cs</span></a></td></tr></table></div>
+
+```c#
+var builder = services.AddIdentityServer(
+                    options =>
+                    {
+                        options.AccessTokenJwtType = "JWT";
+                        options.EmitStaticAudienceClaim = true;
+                    }
+                ) // 인증서비스 등록방식 생성(JWT 방식을 쓰는 이유는 Framework와 호환을 위해)
+                .AddDeveloperSigningCredential() //개발시에만 사용하자(배포시 보여지면 안되는 정보도 포함되어 보여짐).
+                .AddInMemoryApiScopes(Config.ApiScopes) //API SCOPE 등록
+                .AddInMemoryClients(Config.Clients); //클라이언트 등록
+```
+
 
 6. 이어서 <span style="color:rgb(0,2555,255)">Configure</span> 매서드 안에 아래의 소스를 추가하여 미들웨어를 등록한다
-<div class="colorscripter-code" style="color:#010101;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important; position:relative !important;overflow:auto"><table class="colorscripter-code-table" style="margin:0;padding:0;border:none;background-color:#fafafa;border-radius:4px;" cellspacing="0" cellpadding="0"><tr><td style="padding:6px;border-right:2px solid #e5e5e5"><div style="margin:0;padding:0;word-break:normal;text-align:right;color:#666;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;line-height:130%"><div style="line-height:130%">1</div></div></td><td style="padding:6px 0;text-align:left"><div style="margin:0;padding:0;color:#010101;font-family:Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;line-height:130%"><div style="padding:0 6px; white-space:pre; line-height:130%">app.UseIdentityServer();</div></div></td><td style="vertical-align:bottom;padding:0 2px 4px 0"><a href="http://colorscripter.com/info#e" target="_blank" style="text-decoration:none;color:white"><span style="font-size:9px;word-break:normal;background-color:#e5e5e5;color:white;border-radius:10px;padding:1px">cs</span></a></td></tr></table></div>
+```csharp
+app.UseIdentityServer();
+```
 <hr>
 ## 추가 설명
 1. 콘솔로 시작되어 그 안에 실행하는 로그를 보려면 Nuget Package <span style="color:rgb(255,0,255)">Serilog.AspNetCore</span>를 설치한다
