@@ -10,7 +10,7 @@ namespace Client
     {
         private static async Task Main()
         {
-            // discover endpoints from metadata
+            // 메타데이터 엔드포인트 지정(호스트 주소를 적으면 엔드포인트는 알아서 붙인다(기본설정시))
             var client = new HttpClient();
 
             var disco = await client.GetDiscoveryDocumentAsync("https://localhost:5001");
@@ -20,7 +20,7 @@ namespace Client
                 return;
             }
 
-            // request token
+            // 토큰 호출
             var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
             {
                 Address = disco.TokenEndpoint,
@@ -39,7 +39,7 @@ namespace Client
             Console.WriteLine(tokenResponse.Json);
             Console.WriteLine("\n\n");
 
-            // call api
+            // Api 호출
             var apiClient = new HttpClient();
             apiClient.SetBearerToken(tokenResponse.AccessToken);
 
